@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
-const UsuariosSchema = new mongoose.schema({
+const usuariosSchema = new mongoose.Schema({
+   id:mongoose.Schema.Types.ObjectId,
    nome :{
      type: String,
      require :true
@@ -14,12 +15,24 @@ const UsuariosSchema = new mongoose.schema({
      type: String,
      require :true
    },
-  prestadorDEServico:{
-    taype :Boolean ,
+   idade :{
+     type: Number,
+     require :true
+   },
+   genero :{
+     type: String,
+     require :true
+   },
+  prestadorDeServico:{
+    type :Boolean ,
     require :true
    },
-   pagament :{
-     taype: String,
+  tipoDeServico: {
+    type : String,
+    require :true
+   },
+   pagamento :{
+     type: String,
      require :true
    },
 
@@ -27,6 +40,6 @@ const UsuariosSchema = new mongoose.schema({
 
 },{timestamps: true})
 
-const User = mongoose.model('User',UsuariosSchema)
+const User = mongoose.model('User',usuariosSchema)
 
 module.exports = User
