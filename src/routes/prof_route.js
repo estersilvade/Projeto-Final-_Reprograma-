@@ -25,7 +25,7 @@ router.get('/lista', profController.lista)
 //@acc public
 router.post('/criar', profController.criar)
 
-router.delete('/delete',profController.excluir)
+router.delete('/excluir/:id', profController.excluir)
 
 
 

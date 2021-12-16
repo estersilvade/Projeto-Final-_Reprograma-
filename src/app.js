@@ -7,7 +7,7 @@ const cors = require('cors')
 const database = require('./database/configMong')
 
 const User = require('./routes/rotas')
-const Prof = require('./routes/prof_routa')
+const Prof = require('./routes/prof_route')
 
 const app = express()
 

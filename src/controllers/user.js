@@ -48,7 +48,7 @@ const register = async (req, res) => {
      })
 
 }catch (error) {
-  res.satus(500).json({
+  res.status(500).json({
     message:error.message 
   })
 
@@ -94,7 +94,7 @@ const deleteItem = async (req, res ) => {
 
   }catch (error) {
     res.status(500).json({
-      messagen: error.message
+      menssagen: error.message
     })
   }
 }

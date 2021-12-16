@@ -26,6 +26,12 @@ const servicoScherma = new mongoose.Schema({
     type:Number,
     requere:true
 
+  },
+  idUser :{
+    type:String,
+    requere:true
+
+    
   }
 })
 const Prof = mongoose.model('Prof',servicoScherma)
