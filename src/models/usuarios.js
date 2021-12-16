@@ -27,15 +27,15 @@ const usuariosSchema = new mongoose.Schema({
     type :Boolean ,
     require :true
    },
-  tipoDeServico: {
-    type : String,
-    require :true
-   },
    pagamento :{
-     type: String,
-     require :true
-   },
-
+    type: String,
+    require :true
+  },
+  tipoDeServico: {
+    type : mongoose.ObjectId,
+    ref:'Prof'
+   }
+   
     
 
 },{timestamps: true})

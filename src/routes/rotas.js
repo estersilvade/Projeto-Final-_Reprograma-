@@ -4,7 +4,7 @@ const router = express.Router()
 
 const usercontroller = require('../controllers/user')
 
-//@ router Get' /'
+//@ router Get' /' Apresentação 
 //@dec Rota de teste com apresentação com
 //@acc public
 

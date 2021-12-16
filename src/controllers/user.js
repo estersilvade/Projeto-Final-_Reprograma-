@@ -15,7 +15,7 @@ const getAll = async (req, res) => {
     })
   }catch (error) {
     res.status(500).json({
-     mensagem: error.message 
+     menssage: error.message 
     })
 
   }
