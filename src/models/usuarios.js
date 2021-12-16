@@ -31,9 +31,16 @@ const usuariosSchema = new mongoose.Schema({
     type: String,
     require :true
   },
-  tipoDeServico: {
-    type : mongoose.ObjectId,
-    ref:'Prof'
+  bairro :{
+    type: String,
+    unique :true,
+    require :true
+  },
+  tipoDeServicoId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Prof",
+    require :true
+
    }
    
     

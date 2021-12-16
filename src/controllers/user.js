@@ -1,5 +1,6 @@
 const User = require('../models/usuarios')
 
+
 const{ hashPassWord} = require('../helpers/auth')
 
 const bcrypt = require('bcrypt')
@@ -24,7 +25,7 @@ const getAll = async (req, res) => {
 //registro de usuarios 
 
 const register = async (req, res) => {
-   const { nome, email , password , idade, tipoDeServico , pagamento, genero, prestadorDeServico } = req. body
+   const { nome, email , password , idade, tipoDeServico , pagamento, genero, prestadorDeServico ,bairro } = req. body
    try{
      const newUser = new User({
       nome,
@@ -34,7 +35,8 @@ const register = async (req, res) => {
       tipoDeServico,
       pagamento,
       genero,
-      prestadorDeServico
+      prestadorDeServico,
+      bairro 
      })
      const passwordHashed = await hashPassWord(newUser.password,res )
      newUser.password = passwordHashed
@@ -91,7 +93,7 @@ const deleteItem = async (req, res ) => {
     })
 
   }catch (error) {
-    res.status(200).json({
+    res.status(500).json({
       messagen: error.message
     })
   }
@@ -99,11 +101,19 @@ const deleteItem = async (req, res ) => {
 
 
 //update altera informaçoes 
- const update = async (req, res) => {
-   
+ const updateUser = async (req, res) => {
+   //criar variavel para trazer o toke
+  const authHeader = req.get("authorization")
+  //ele serve para  quebrado 
+  const token = authHeader.split(" ")[1];
+  //verificação do coteudo dentro do toke
+  const decoded = jwt.verify(token, process.env.SECRET)
+  
+  const idUser = decoded.id.valueOf();
+     
   try{
-    const alterarDados = await User.findById(req.params.id)
-    const {nome, email , password , idade, tipoDeServico , pagamento, genero, prestadorDeServico}= req.body
+    const alterarDados = await User.findById(idUser)
+    const {nome, email , password , idade, tipoDeServico , pagamento, genero, prestadorDeServico,bairro }= req.body
     alterarDados.nome = nome || alterarDados.nome
     alterarDados.email = email|| alterarDados.email
     alterarDados.password = password || alterarDados.password
@@ -112,6 +122,7 @@ const deleteItem = async (req, res ) => {
     alterarDados.pagamento = pagamento || alterarDados.pagamento
     alterarDados.genero = genero || alterarDados.genero
     alterarDados.prestadorDeServico = prestadorDeServico || alterarDados.prestadorDeServico
+    alterarDados.bairro = bairro || alterarDados.bairro
   
     const dadosAlterados = await alterarDados.save()
     return res.status(200).json({
@@ -119,8 +130,10 @@ const deleteItem = async (req, res ) => {
     })
   
   }catch (error) {
+    console.log(error)
     res.status(500).json({
       mensagem: error.mensage
+
     })
   }
  }
@@ -135,6 +148,6 @@ module.exports = {
   register,
   login,
   deleteItem,
-  update
+  updateUser
   
 }

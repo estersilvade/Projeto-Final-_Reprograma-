@@ -1,6 +1,7 @@
 const mongoose = require('mongoose') 
 
 const servicoScherma = new mongoose.Schema({
+  id:mongoose.Schema.Types.ObjectId,
   Atividade:{
     type: String,
     requere:true
@@ -29,4 +30,4 @@ const servicoScherma = new mongoose.Schema({
 })
 const Prof = mongoose.model('Prof',servicoScherma)
 
-module.exports
+module.exports = Prof

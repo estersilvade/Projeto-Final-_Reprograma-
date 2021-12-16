@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const usercontroller = require('../controllers/user')
+const userController = require('../controllers/user')
 
 //@ router Get' /' Apresentação 
 //@dec Rota de teste com apresentação com
@@ -15,27 +15,27 @@ router.get('/', (req, res) => res.status(200).json({
 //@ route Get /All
 //@dec Lista de usuários 
 //@access public
-router.get('/all', usercontroller.getAll)
+router.get('/all', userController.getAll)
 
 //@route Post /register
 //@dec Registro de usuários
 //@access public
-router.post('/register', usercontroller.register)
+router.post('/register', userController.register)
 
 //@ route Post /logi
 //@dec Registro de usuários
 //@access public
-router.post('/login', usercontroller.login)
+router.post('/login', userController.login)
 
 //@route DElete /Id
 //@route deleta usuários
 //@rout privada 
-router.delete('/delete/:id', usercontroller.deleteItem)
+router.delete('/delete/:id', userController.deleteItem)
 
 //@route update / id
 //@route update usuários
 //@rout privada 
-router.patch('/atualizar/:id', usercontroller.update)
+router.patch('/atualizar', userController.updateUser)
 
 
 module.exports = router
