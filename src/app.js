@@ -20,10 +20,10 @@ app.use(express.json())
 
 
 // rota de teste 
-//app.use('/', User)
+app.use('/', User)
 
  //rota teste server
  app.use('/prof', Prof)
-app.get('/',  (req, res) => res.status(200).send ("oi") )
+//app.get('/',  (req, res) => res.status(200).send ("oi") )
 
 module.exports = app
