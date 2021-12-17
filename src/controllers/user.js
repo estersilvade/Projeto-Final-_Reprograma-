@@ -9,8 +9,11 @@ const jwt = require('jsonwebtoken')
 
 // lista  de usuarios para
 const getAll = async (req, res) => {
+
   try {
-    const users = await User.find()
+    const users = await User.find({
+      prestadorDeServico:true,
+    })
     res.status(200).json({
       message:"Lista de pessas",users
     })

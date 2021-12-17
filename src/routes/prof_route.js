@@ -15,10 +15,6 @@ router.get('/prof', (req, res) => {
   })
 })
 
-//@rout get '/lista' apresentação
-//@dec Rota de teste com apresentação com
-//@acc public
-router.get('/lista', profController.lista)
 
 //@rout get '//criar' apresentação
 //@dec Rota de teste com apresentação com
@@ -28,5 +24,10 @@ router.post('/criar', profController.criar)
 router.delete('/excluir/:id', profController.excluir)
 
 
+
+//@rout get '/lista' apresentação
+//@dec Rota de teste com apresentação com
+//@acc public
+router.get('/lista/:id', profController.lista)
 
 module.exports = router

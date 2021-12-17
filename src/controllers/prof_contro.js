@@ -28,9 +28,9 @@ const criar = async(req, res) => {
 const lista  = async (req, res) => {
  
   try{
-   // const { listaUsuarioId } = req.query
+    const { id} = req.params
   
-    const prof = await Prof.find()
+    const prof = await Prof.findById(id)
   /*  if(listaUsuarioId === prof.idUser){
       return prof
     }

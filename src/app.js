@@ -6,7 +6,8 @@ const cors = require('cors')
 
 const database = require('./database/configMong')
 
-const User = require('./routes/rotas')
+const User = require('./routes/route')
+
 const Prof = require('./routes/prof_route')
 
 const app = express()
@@ -19,10 +20,10 @@ app.use(express.json())
 
 
 // rota de teste 
-app.use('/', User)
+//app.use('/', User)
 
  //rota teste server
- app.use('/prof', Prof)
-
+ //app.use('/prof', Prof)
+app.get('/',  (req, res) => res.status(200).send ("oi") )
 
 module.exports = app
