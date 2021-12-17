@@ -69,8 +69,7 @@ const excluir = async (req, res) => {
   }
 }
 
-//get por filtro
-//consoleconst listaSerUser = (req, res) => {
+
 
 
 
