@@ -36,17 +36,11 @@ const usuariosSchema = new mongoose.Schema({
     unique :true,
     require :true
   },
-  tipoDeServicoId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Prof",
-    require :true
-
-   }
-   
+ 
     
 
 },{timestamps: true})
 
-const User = mongoose.model('User',usuariosSchema)
+const User = mongoose.model('user',usuariosSchema)
 
 module.exports = User

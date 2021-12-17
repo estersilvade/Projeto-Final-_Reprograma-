@@ -1,5 +1,7 @@
 const Prof = require('../models/prof_model')
 
+const User = require('../models/usuarios')
+
 
 //Criar serviço
 const criar = async(req, res) => {
@@ -30,17 +32,9 @@ const lista  = async (req, res) => {
   try{
     const { id} = req.params
   
-    const prof = await Prof.findById(id)
-  /*  if(listaUsuarioId === prof.idUser){
-      return prof
-    }
-    profResponse = prof.filter((p) => {
-     return (
-       p.idUser.toString().substr(0,listaUsuarioId) ===
-       idUser
-     );
-     });
-     */
+    const prof = await User.find()
+    .populate("prof")
+  
     res.status(200).json({ 
       manssagen:"Lista  de serviço", prof
     })

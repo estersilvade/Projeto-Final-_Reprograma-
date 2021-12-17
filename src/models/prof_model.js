@@ -4,15 +4,15 @@ const servicoScherma = new mongoose.Schema({
   id:mongoose.Schema.Types.ObjectId,
   Atividade:{
     type: String,
-    requere:true
+    required:true
   },
   diaria:{
     type: Boolean,
-    requere:true
+    required:true
   },
   hora :{
     type: Boolean,
-    requere:true
+    required:true
   },
   Valor:{
     type: Number,
@@ -20,20 +20,20 @@ const servicoScherma = new mongoose.Schema({
   },
   agendarData:{
     type:Date,
-    requere:true
+    required:true
   },
   agendarHorario:{
     type:Number,
-    requere:true
+    required:true
 
   },
-  idUser :{
-    type:String,
-    requere:true
+  idUser:{
+    type: mongoose.Schema.Types.ObjectId,
+    required: true ,
+    ref: 'user'
+},
 
-    
-  }
 })
-const Prof = mongoose.model('Prof',servicoScherma)
+const Prof = mongoose.model('prof',servicoScherma)
 
 module.exports = Prof
