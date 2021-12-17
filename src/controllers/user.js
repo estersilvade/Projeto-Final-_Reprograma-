@@ -28,7 +28,7 @@ const getAll = async (req, res) => {
 //registro de usuarios 
 
 const register = async (req, res) => {
-   const { nome, email , password , idade, tipoDeServico , pagamento, genero, prestadorDeServico ,bairro } = req. body
+   const { nome, email , password , idade, tipoDeServico , pagamento, genero, prestadorDeServico ,bairro,profissaoRefId } = req. body
    try{
      const newUser = new User({
       nome,
@@ -39,7 +39,9 @@ const register = async (req, res) => {
       pagamento,
       genero,
       prestadorDeServico,
-      bairro 
+      bairro,
+      profissaoRefId
+
      })
      const passwordHashed = await hashPassWord(newUser.password,res )
      newUser.password = passwordHashed

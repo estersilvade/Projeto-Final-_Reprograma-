@@ -1,39 +1,32 @@
-const mongoose = require('mongoose') 
+const mongoose = require('mongoose')
 
 const servicoScherma = new mongoose.Schema({
-  id:mongoose.Schema.Types.ObjectId,
-  Atividade:{
+  id: mongoose.Schema.Types.ObjectId,
+  atividade: {
     type: String,
-    required:true
+    required: true
   },
-  diaria:{
+  diaria: {
     type: Boolean,
-    required:true
+    required: true
   },
-  hora :{
+  hora: {
     type: Boolean,
-    required:true
+    required: true
   },
-  Valor:{
+  Valor: {
     type: Number,
     min: 0
   },
-  agendarData:{
-    type:Date,
-    required:true
+  agendarData: {
+    type: Date,
+    required: true
   },
-  agendarHorario:{
-    type:Number,
-    required:true
-
-  },
-  idUser:{
-    type: mongoose.Schema.Types.ObjectId,
-    required: true ,
-    ref: 'user'
-},
-
+  agendarHorario: {
+    type: Number,
+    required: true
+  }
 })
-const Prof = mongoose.model('prof',servicoScherma)
+const Prof = mongoose.model('profissao', servicoScherma)
 
 module.exports = Prof

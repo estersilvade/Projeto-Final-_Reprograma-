@@ -6,11 +6,11 @@ const User = require('../models/usuarios')
 //Criar serviço
 const criar = async(req, res) => {
   const {
-    Atividade,diaria,hora,valor,agendarData,agendarHorario,idUser
+    atividade,diaria,hora,valor,agendarData,agendarHorario,
   }= req.body
   try{
     const newProf = new Prof({
-      Atividade,diaria,hora,valor,agendarData,agendarHorario,idUser
+      atividade,diaria,hora,valor,agendarData,agendarHorario,
     })
     const saveProf = await newProf.save()
     res.status(200).json({
@@ -33,7 +33,7 @@ const lista  = async (req, res) => {
     const { id} = req.params
   
     const prof = await User.find()
-    .populate("prof")
+    .populate("profissaoRefId")
   
     res.status(200).json({ 
       manssagen:"Lista  de serviço", prof
