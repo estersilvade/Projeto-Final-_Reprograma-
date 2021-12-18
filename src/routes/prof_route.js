@@ -9,7 +9,7 @@ const profController = require('../controllers/prof_contro')
 //@dec Rota de teste com apresentação com
 //@acc public
 
-router.get('/prof', (req, res) => {
+router.get('/', (req, res) => {
   res.status(200).json({
     message:"Helpe Vizinhos API para conectar pessoas prestadores de serviços  e solicitantes  da mesma região."
    })
