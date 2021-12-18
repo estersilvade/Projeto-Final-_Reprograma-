@@ -33,6 +33,6 @@ router.delete('/excluir/:id', profController.excluir)
 //@rout get '/lista' apresentação
 //@dec lista de profissao
 //@acc public
-router.get('/lista/:', profController.lista)
+router.get('/lista/:id', profController.lista)
 
 module.exports = router

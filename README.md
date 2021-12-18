@@ -2,10 +2,14 @@
     <br>
     <p align="center">Projeto Final {Reprograma}<p>
 </h1>
-<p align="center">
-<img src="" width="80%" height="50%"/>
-</p>
-<br>
+
+ <p align="center">
+<img src='https://w7.pngwing.com/pngs/265/604/png-transparent-architectural-engineering-architecture-renovation-worker-team-public-relations-engineering-thumbnail.png'title="Banner">
+
+<h2 align="center">
+    <br>
+    <p align="center"> Help Vizinhos  <p>
+</h2>
 
 ## 💻 Sobre o projeto 
 
@@ -79,7 +83,7 @@ Para a construção do projeto, as seguintes tecnologias foram utilizadas:
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [Mongoose](https://mongoosejs.com/)
 - [cors](https://www.npmjs.com/package/cors)
-- [modemon](https://www.npmjs.com/package/nodemon)
+- [Nodemon](https://www.npmjs.com/package/nodemon)
 
 
 <br>
@@ -149,12 +153,105 @@ Siga os passos e inclua as informações abaixo:
 
 ## 🔃 Retorna a documentação no swagger 
     
-Swagger - Heroku: https://estante-de-historias.herokuapp.com/api-docs/
+Swagger - Heroku: 
 
 | Método HTTP  | Endpoint                            | Descrição                            |
 | ------------ | ----------------------------------- | ------------------------------------ |
-| GET          | `http://localhost:8084/api-docs`    |  documentação  swagger               |        
+| GET          | http://localhost:8084api`    |  documentação  swagger               |        
 
 <br>
 
-## 🔃 Retorna teste com apresentação 
+## 🔃 Manipulação das Rotas de usuários:
+
+| Método HTTP  | Endpoint                | Descrição                            |
+| ------------ | ----------------------- | ------------------------------------ |
+| GET          | `'/ ' `              | Retorna apresentação  do API             |
+| GET          | `'/all'`                 | Retorna lista de usuários cadastrados     |
+| POST         | `'/login'`          |  Abrir aba de loguim       |
+| Delete         | `'/delete/:id`    | Deletar usuário           |
+| POST           | `'/atualizar'`     | Atualização de dados do usuário      
+
+<br>
+## 🔃 Manipulação das Rotas de usuários:
+
+| Método HTTP  | Endpoint                | Descrição                            |
+| ------------ | ----------------------- | ------------------------------------ |
+| GET          | `'/prof' `              | Apresentação  da aba de profissões    |
+| GET          | `'/criar'`                 | Cria um campo de profissão para o usuario     |
+| GET          | `'/excluir/:id'`          | Deleta profição post de profição   |
+| POST         | `'/lista/:id'`    | mostra lista  de pessoas e profissões cadastradas        |
+
+<br>
+
+## 📊 Dados para Collection Usuários 
+
+- id: autogerado e obrigatório
+- nome: texto e obrigatório
+- email: texto e obrigatório 
+- password: texto e obrigatório
+- bairro : texto obrigatório
+- profissaoRefId : configMong e obrigatório
+<br>
+<br>
+## ✔️ API deve retornar seguinte JSON:
+
+```json
+
+ {"_id": "61bc1398c23b79fb0b6d4e5d",
+    "nome": "ffff  ",
+    "email": "fffff@gmail.com",
+    "password": "$2b$10$x1sGon6bKVXIiyYhBwWQ9OJvb9bjKnhIKJY.sAxrJjfuATmwWDsza",
+    "idade": 00,
+    "genero": "mulher",
+    "prestadorDeServico": true,
+    "pagamento": "pix",
+ }
+ 
+ 
+ ```
+
+
+
+## 📊 Dados para Collection Profissão  
+
+<br>
+
+- id: autogerado e obrigatório
+- atividade: texto e obrigatório
+-diaria : boolean e obrigatório 
+- hora: boolean e obrigatório
+- bairro : texto obrigatório
+- agendarData: Date e obrigatório
+-agendarHorario: Number e obrigatório
+<br>
+
+```json
+{
+    "atividade": "programadora",
+    "diaria" : "true",
+    "hora" :"false",
+    "valor" : "150",
+    "agendarData" : "00" ,
+    "agendarHorario" : "00"
+}
+```
+<br>
+## 🚧 Projeto em Construção (futuras melhorias)
+
+*  Autenticação das Rotas;
+*  Sistema de login;
+*  Atualização na construções da  API
+*  Licença
+*  Implantação de código HTML e CSS para criação de uma interface capaz de possibilitar a interação do usuário com aplicação.
+
+## 👋 Até breve 
+
+<br>
+
+<p align="center">
+<img src='https://raw.githubusercontent.com/davidtheclark/gifs/master/alarum.gif' title="Banner">
+</p>
+
+
+
+
