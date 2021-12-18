@@ -9,7 +9,7 @@ const userController = require('../controllers/user')
 //@acc public
 
 router.get('/', (req, res) => res.status(200).json({
-  mensage: "Helpe Visinhos "
+  menssagen:: "Helpe Visinhos "
 })) 
 
 //@ route Get /All
