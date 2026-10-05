@@ -18,7 +18,7 @@ rodar() { # $1 = nome do relatório, demais = pastas
   local pastas=(); for p in "$@"; do pastas+=(--folder "$p"); done
   subir_api
   npx --yes newman run "$COLLECTION" "${pastas[@]}" \
-    -r cli,htmlextra --reporter-htmlextra-export "reports/$nome.html" || FALHOU=1
+    -r cli,htmlextra,json --reporter-htmlextra-export "reports/$nome.html" --reporter-json-export "reports/$nome.json" || FALHOU=1
   parar_api
 }
 
@@ -26,4 +26,5 @@ rodar 1-fluxo-principal "01 - Serviços" "02 - Usuários" "03 - Login e atualiza
 rodar 2-queda-no-login "05 - Queda no login"
 rodar 3-queda-sem-token "06 - Queda sem token"
 
+node tests/resumo.js
 exit $FALHOU
