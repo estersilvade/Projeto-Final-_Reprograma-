@@ -1,0 +1,46 @@
+name: Testes de API
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:5.0
+        ports:
+          - 27017:27017
+
+    env:
+      MONGO_URI: mongodb://localhost:27017/helpvizinhos
+      SECRET: segredo-so-para-teste
+      PORT: 8087
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Instalar dependências da API
+        run: npm ci
+
+      - name: Instalar Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Rodar os testes
+        run: bash tests/run.sh
+
+      - name: Salvar relatórios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios-testes
+          path: reports/

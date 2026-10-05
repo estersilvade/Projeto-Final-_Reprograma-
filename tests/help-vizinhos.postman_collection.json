@@ -1,0 +1,821 @@
+{
+  "info": {
+    "name": "Help Vizinhos - Testes de API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Testes da API Help Vizinhos (Node.js + Express + MongoDB). Os testes descrevem o comportamento ESPERADO; os que falham apontam bugs documentados em BUGS.md."
+  },
+  "item": [
+    {
+      "name": "01 - Serviços",
+      "item": [
+        {
+          "name": "CT01 - API no ar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT02 - Cadastrar serviço salva o valor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/prof/criar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prof",
+                "criar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"atividade\": \"Eletricista\",\n  \"diaria\": true,\n  \"hora\": false,\n  \"valor\": 150,\n  \"agendarData\": \"2026-12-01\",\n  \"agendarHorario\": 9\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('sufixo', Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('profId', body.saveProf && body.saveProf._id);",
+                  "pm.test('Status 201 - Created', () => pm.response.to.have.status(201));",
+                  "pm.test('BUG-01: valor do serviço é salvo', () => pm.expect(body.saveProf.valor).to.eql(150));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Usuários",
+      "item": [
+        {
+          "name": "CT03 - Cadastrar usuária",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Vizinha Teste\",\n  \"email\": \"vizinha.a.{{sufixo}}@teste.com\",\n  \"password\": \"Senha@123\",\n  \"idade\": 30,\n  \"genero\": \"mulher\",\n  \"prestadorDeServico\": true,\n  \"pagamento\": \"pix\",\n  \"bairro\": \"Centro\",\n  \"profissaoRefId\": \"{{profId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Status 201 - Created', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('userA', body.saveUser && body.saveUser._id);",
+                  "pm.test('BUG-02: resposta não expõe a senha', () => pm.expect(body.saveUser).to.not.have.property('password'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT04 - Cadastrar segunda vizinha do MESMO bairro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Vizinha Teste\",\n  \"email\": \"vizinha.b.{{sufixo}}@teste.com\",\n  \"password\": \"Senha@123\",\n  \"idade\": 30,\n  \"genero\": \"mulher\",\n  \"prestadorDeServico\": true,\n  \"pagamento\": \"pix\",\n  \"bairro\": \"Centro\",\n  \"profissaoRefId\": \"{{profId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set('userB', body.saveUser && body.saveUser._id);",
+                  "pm.test('BUG-03: duas pessoas podem morar no mesmo bairro (201)', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT05 - Não cadastrar e-mail repetido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Vizinha Teste\",\n  \"email\": \"vizinha.a.{{sufixo}}@teste.com\",\n  \"password\": \"Senha@123\",\n  \"idade\": 30,\n  \"genero\": \"mulher\",\n  \"prestadorDeServico\": true,\n  \"pagamento\": \"pix\",\n  \"bairro\": \"Vila Ema\",\n  \"profissaoRefId\": \"{{profId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-04: e-mail repetido retorna 400 (e não 500)', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT06 - Não cadastrar sem campos obrigatórios",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"Senha@123\",\n  \"bairro\": \"Sem Nome {{sufixo}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.saveUser) pm.collectionVariables.set('userLixo', body.saveUser._id);",
+                  "pm.test('BUG-05: sem nome e e-mail retorna 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT07 - Listar prestadores sem expor senhas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "all"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "const users = pm.response.json().users || [];",
+                  "pm.test('BUG-02: nenhuma senha aparece na lista', () => users.forEach(u => pm.expect(u).to.not.have.property('password')));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Login e atualização",
+      "item": [
+        {
+          "name": "CT08 - Login com sucesso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vizinha.a.{{sufixo}}@teste.com\",\n  \"password\": \"Senha@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Retorna token', () => pm.expect(body.token).to.be.a('string'));",
+                  "pm.collectionVariables.set('token', body.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT09 - Login com senha errada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vizinha.a.{{sufixo}}@teste.com\",\n  \"password\": \"errada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-06: senha errada retorna 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT10 - Atualizar a senha",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/atualizar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "atualizar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"NovaSenha@456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('BUG-02: resposta não expõe a senha', () => pm.expect(pm.response.json().dadosAlterados).to.not.have.property('password'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT11 - Login com a senha nova",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vizinha.a.{{sufixo}}@teste.com\",\n  \"password\": \"NovaSenha@456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-07: login funciona depois de trocar a senha', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Exclusão e limpeza",
+      "item": [
+        {
+          "name": "CT12 - Excluir usuária SEM token é bloqueado",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/delete/{{userB}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "delete",
+                "{{userB}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-08: excluir sem token retorna 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT13 - Excluir usuária inexistente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/delete/000000000000000000000000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "delete",
+                "000000000000000000000000"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-09: ID inexistente retorna 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT14 - Limpeza: excluir usuária A",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/delete/{{userA}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "delete",
+                "{{userA}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT15 - Limpeza: excluir usuária B",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/delete/{{userB}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "delete",
+                "{{userB}}"
+              ]
+            }
+          },
+          "event": []
+        },
+        {
+          "name": "CT16 - Limpeza: excluir cadastro incompleto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/delete/{{userLixo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "delete",
+                "{{userLixo}}"
+              ]
+            }
+          },
+          "event": []
+        },
+        {
+          "name": "CT17 - Limpeza: excluir serviço",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/prof/excluir/{{profId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "prof",
+                "excluir",
+                "{{profId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 - Queda no login",
+      "item": [
+        {
+          "name": "CT18 - Login com e-mail que não existe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ninguem.{{$timestamp}}@teste.com\",\n  \"password\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Retorna 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT19 - API continua no ar depois do CT18",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-10: a API não cai', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 - Queda sem token",
+      "item": [
+        {
+          "name": "CT20 - Atualizar SEM token",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/atualizar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "atualizar"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Sem token\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Retorna 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "CT21 - API continua no ar depois do CT20",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('BUG-11: a API não cai', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8087"
+    },
+    {
+      "key": "sufixo",
+      "value": ""
+    },
+    {
+      "key": "profId",
+      "value": ""
+    },
+    {
+      "key": "userA",
+      "value": ""
+    },
+    {
+      "key": "userB",
+      "value": ""
+    },
+    {
+      "key": "userLixo",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
